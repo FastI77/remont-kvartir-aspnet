@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ремонт квартир и коттеджей</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">Ремонт<span>Про</span></a>
+
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/Home/About">О компании</a></li>
+                    <li><a href="/Reviews">Отзывы</a></li>
+                    <li><a href="/Promotions">Акции</a></li>
+                    <li><a href="/Contacts">Контакты</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="/Account/Login" class="btn-login">Личный кабинет</a>
+            </div>
+
+            <button class="burger" id="burgerBtn">&#9776;</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>РемонтПро</h4>
+                    <p style="margin-bottom: 15px;">Профессиональный ремонт квартир и коттеджей под ключ. Молодая команда с современным подходом. Фиксированная смета, гарантия 3 года.</p>
+                    <p>ООО «РемонтПро»<br>ИНН: 1831234567<br>ОГРН: 1267746123456</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Навигация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/Home/About">О компании</a></li>
+                        <li><a href="/Reviews">Отзывы</a></li>
+                        <li><a href="/Promotions">Акции</a></li>
+                        <li><a href="/Contacts">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Политика конфиденциальности</h4>
+                    <ul>
+                        <li style="margin-top: 15px;"><a href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; @DateTime.Now.Year ООО «РемонтПро». Все права защищены.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
