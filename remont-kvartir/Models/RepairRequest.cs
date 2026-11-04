@@ -6,8 +6,14 @@ namespace remont_kvartir.Models
     {
         public int Id { get; set; }
 
-        public string UserId { get; set; } = string.Empty;
+        public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
+
+        [Display(Name = "Имя клиента")]
+        public string? ClientName { get; set; }
+
+        [Display(Name = "Телефон клиента")]
+        public string? ClientPhone { get; set; }
 
         [Required]
         [Display(Name = "Тип ремонта")]

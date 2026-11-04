@@ -12,6 +12,7 @@ namespace remont_kvartir.Data
         }
 
         public DbSet<RepairRequest> RepairRequests { get; set; } = null!;
+        public DbSet<Service> Services { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<remont_kvartir.Models.Service>
+@{
+    ViewData["Title"] = "Наши услуги";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title-center">Наши услуги</h2>
+
+        <!-- Панель фильтрации -->
+        <form method="get" asp-action="Index" style="margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; background: #f9f7f4; padding: 20px; border-radius: 8px; border: 1px solid var(--color-border);">
+
+            <div style="flex: 1; min-width: 200px;">
+                <label for="search" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px;">Поиск</label>
+                <input type="text" id="search" name="search" value="@ViewBag.CurrentSearch" placeholder="Название услуги..." class="custom-input" style="padding: 10px 15px;" />
+            </div>
+
+            <div style="flex: 1; min-width: 180px;">
+                <label for="category" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px;">Категория</label>
+                <select id="category" name="category" class="custom-select" style="padding: 10px 15px;">
+                    <option value="">Все категории</option>
+                    @if (ViewBag.Categories != null)
+                    {
+                        foreach (var cat in ViewBag.Categories)
+                        {
+                            <option value="@cat" selected="@(ViewBag.CurrentCategory == cat)">@cat</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div style="flex: 1; min-width: 180px;">
+                <label for="sort" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px;">Сортировка</label>
+                <select id="sort" name="sort" class="custom-select" style="padding: 10px 15px;">
+                    <option value="">Сначала новые</option>
+                    <option value="price_asc" selected="@(ViewBag.CurrentSort == "price_asc")">Цена (по возрастанию)</option>
+                    <option value="price_desc" selected="@(ViewBag.CurrentSort == "price_desc")">Цена (по убыванию)</option>
+                    <option value="name_asc" selected="@(ViewBag.CurrentSort == "name_asc")">По алфавиту</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: stretch;">
+                <button type="submit" class="btn-submit" style="padding: 0 25px; height: 44px; display: flex; align-items: center; justify-content: center;">
+                    Применить
+                </button>
+                <a asp-action="Index" class="btn-dark" style="padding: 0 25px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; border-radius: 6px;">
+                    Сбросить
+                </a>
+            </div>
+        </form>
+
+        <!-- Список услуг -->
+        @if (!Model.Any())
+        {
+            <div class="text-center" style="padding: 40px 0;">
+                <p class="text-muted">По вашему запросу ничего не найдено.</p>
+                <a asp-action="Index" class="link-arrow">Сбросить фильтры</a>
+            </div>
+        }
+        else
+        {
+            <div class="grid-3">
+                @foreach (var service in Model)
+                {
+                    <div class="card service-card" style="display: flex; flex-direction: column;">
+
+                        <!-- Категория и Длительность -->
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; font-weight: 600; color: var(--color-accent);">
+                            <span>@(string.IsNullOrEmpty(service.Category) ? "Услуга" : service.Category)</span>
+                            @if (!string.IsNullOrEmpty(service.Duration))
+                            {
+                                <span class="text-muted" style="font-weight: normal;">⏱ @service.Duration</span>
+                            }
+                        </div>
+
+                        <h3 class="card-title">@service.Title</h3>
+                        <p class="text-muted mb-20" style="flex-grow: 1;">@service.ShortDescription</p>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--color-border); padding-top: 15px;">
+                            @if (!string.IsNullOrEmpty(service.Price))
+                            {
+                                <span class="price-text">@service.Price</span>
+                            }
+                            else
+                            {
+                                <span></span>
+                            }
+                            <a asp-action="Details" asp-route-id="@service.Id" class="btn-card">Подробнее</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

@@ -746,3 +746,13 @@ a {
         margin: 0;
         display: flex;
     }
+.mobile-only {
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+    .mobile-only {
+        display: block;
+    }
+}
