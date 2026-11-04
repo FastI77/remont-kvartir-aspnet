@@ -1,0 +1,43 @@
+﻿@model remont_kvartir.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 480px;">
+        <h2 class="section-title-center" style="margin-bottom: 30px;">Вход в личный кабинет</h2>
+
+        <div class="auth-form-wrapper">
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" style="color:#c00; margin-bottom:15px; font-size: 14px;"></div>
+
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="custom-input" placeholder="Введите ваш email" />
+                    <span asp-validation-for="Email" style="color:#c00; font-size:13px;"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password">Пароль</label>
+                    <input asp-for="Password" class="custom-input" placeholder="Введите пароль" />
+                    <span asp-validation-for="Password" style="color:#c00; font-size:13px;"></span>
+                </div>
+
+                <div class="checkbox-group">
+                    <input asp-for="RememberMe" type="checkbox" />
+                    <label asp-for="RememberMe" style="margin-bottom: 0; font-weight: normal;">Запомнить меня</label>
+                </div>
+
+                <button type="submit" class="btn-submit" style="width:100%;">Войти</button>
+
+                <p style="text-align:center; margin-top:25px; font-size: 14px;">
+                    Нет аккаунта? <a asp-action="Register" style="font-weight: 600;">Зарегистрироваться</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
