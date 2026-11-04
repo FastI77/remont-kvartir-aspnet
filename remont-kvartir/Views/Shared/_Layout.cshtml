@@ -16,14 +16,23 @@
                 <ul>
                     <li><a href="/">Главная</a></li>
                     <li><a href="/Home/About">О компании</a></li>
+                    <li><a href="/Services">Услуги</a></li>
                     <li><a href="/Reviews">Отзывы</a></li>
                     <li><a href="/Promotions">Акции</a></li>
                     <li><a href="/Contacts">Контакты</a></li>
+                    <li class="mobile-only"><a href="/Cabinet">Личный кабинет</a></li>
                 </ul>
             </nav>
 
             <div class="header-actions">
-                <a href="/Account/Login" class="btn-login">Личный кабинет</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/Cabinet" class="btn-login">Личный кабинет</a>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="btn-login">Войти</a>
+                }
             </div>
 
             <button class="burger" id="burgerBtn">&#9776;</button>

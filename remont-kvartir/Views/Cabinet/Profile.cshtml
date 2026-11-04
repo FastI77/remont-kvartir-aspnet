@@ -1,0 +1,46 @@
+﻿@model remont_kvartir.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 600px;">
+        @if (TempData["Success"] != null)
+        {
+            <div class="card" style="background:#e6f7e6; border-color:#79c879; margin-bottom:20px;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <h2 class="section-title-left">Редактирование профиля</h2>
+
+        <form asp-action="Profile" method="post" class="card">
+            <div asp-validation-summary="ModelOnly" style="color:#c00; margin-bottom:15px;"></div>
+
+            <div style="margin-bottom:15px;">
+                <label asp-for="FullName" style="display:block; margin-bottom:6px;"></label>
+                <input asp-for="FullName" class="custom-input" style="color:#1f2328;" />
+                <span asp-validation-for="FullName" style="color:#c00; font-size:13px;"></span>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label asp-for="Email" style="display:block; margin-bottom:6px;"></label>
+                <input asp-for="Email" class="custom-input" style="color:#1f2328;" readonly />
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label asp-for="Phone" style="display:block; margin-bottom:6px;"></label>
+                <input asp-for="Phone" class="custom-input" style="color:#1f2328;" />
+                <span asp-validation-for="Phone" style="color:#c00; font-size:13px;"></span>
+            </div>
+
+            <button type="submit" class="btn-submit" style="width:100%;">Сохранить</button>
+        </form>
+
+        <p style="margin-top:20px;"><a asp-action="Index" class="link-arrow">← Назад в кабинет</a></p>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

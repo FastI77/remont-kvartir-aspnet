@@ -1,0 +1,94 @@
+﻿@model remont_kvartir.ViewModels.CabinetViewModel
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<section class="section-padding">
+    <div class="container">
+        @if (TempData["Success"] != null)
+        {
+            <div class="card" style="background:#e6f7e6; border-color:#79c879; margin-bottom:20px;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <h2 class="section-title-left">Здравствуйте, @Model.User.FullName</h2>
+        <p class="text-muted mb-30">@Model.User.Email</p>
+
+        <div class="grid-3" style="margin-bottom:40px;">
+            <div class="card text-center">
+                <div style="font-size:36px; font-weight:700; color:var(--color-accent);">@Model.TotalRequests</div>
+                <div class="text-muted">Всего заявок</div>
+            </div>
+            <div class="card text-center">
+                <div style="font-size:36px; font-weight:700; color:#3498db;">@Model.NewRequests</div>
+                <div class="text-muted">Новых</div>
+            </div>
+            <div class="card text-center">
+                <div style="font-size:36px; font-weight:700; color:#f39c12;">@Model.InProgressRequests</div>
+                <div class="text-muted">В работе</div>
+            </div>
+        </div>
+
+        <div class="cabinet-actions">
+            <a asp-action="CreateRequest" class="btn-card">+ Новая заявка</a>
+            <a asp-action="Profile" class="btn-dark">Редактировать профиль</a>
+            <a asp-action="ChangePassword" class="btn-dark">Сменить пароль</a>
+
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-dark" style="border:none; cursor:pointer;">Выйти</button>
+            </form>
+        </div>
+
+        <h3 class="section-title-left" style="font-size:24px;">Мои заявки</h3>
+
+        @if (!Model.Requests.Any())
+        {
+            <div class="card">
+                <p class="text-muted">У вас пока нет заявок. <a asp-action="CreateRequest">Создать первую?</a></p>
+            </div>
+        }
+        else
+        {
+            <div style="display:flex; flex-direction:column; gap:15px;">
+                @foreach (var r in Model.Requests)
+                {
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+                            <div>
+                                <h4 style="margin-bottom:8px;">Заявка №@r.Id — @r.RepairType</h4>
+                                <p class="text-muted" style="margin-bottom:6px;">@r.Description</p>
+                                <p class="text-muted" style="font-size:13px;">
+                                    Создана: @r.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                    @if (r.Area.HasValue)
+                                    {
+                                        <span> • Площадь: @r.Area м²</span>
+                                    }
+                                </p>
+                            </div>
+                            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px; min-width: 120px;">
+                                @switch (r.Status)
+                                {
+                                    case remont_kvartir.Models.RequestStatus.New:
+                                        <span class="badge" style="background:#3498db;">Новая</span>
+                                        break;
+                                    case remont_kvartir.Models.RequestStatus.InProgress:
+                                        <span class="badge" style="background:#f39c12;">В работе</span>
+                                        break;
+                                    case remont_kvartir.Models.RequestStatus.Completed:
+                                        <span class="badge" style="background:#27ae60;">Завершена</span>
+                                        break;
+                                    case remont_kvartir.Models.RequestStatus.Cancelled:
+                                        <span class="badge" style="background:#95a5a6;">Отменена</span>
+                                        break;
+                                }
+                                <a asp-action="RequestDetails" asp-route-id="@r.Id" class="link-arrow">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

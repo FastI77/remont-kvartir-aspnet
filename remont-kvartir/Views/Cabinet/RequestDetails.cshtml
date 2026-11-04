@@ -1,0 +1,56 @@
+﻿@model remont_kvartir.Models.RepairRequest
+@{
+    ViewData["Title"] = "Заявка №" + Model.Id;
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 700px;">
+        <h2 class="section-title-left">Заявка №@Model.Id</h2>
+
+        <div class="card">
+            <p style="margin-bottom:10px;"><strong>Тип ремонта:</strong> @Model.RepairType</p>
+            <p style="margin-bottom:10px;"><strong>Описание:</strong> @Model.Description</p>
+            @if (!string.IsNullOrEmpty(Model.Address))
+            {
+                <p style="margin-bottom:10px;"><strong>Адрес:</strong> @Model.Address</p>
+            }
+            @if (Model.Area.HasValue)
+            {
+                <p style="margin-bottom:10px;"><strong>Площадь:</strong> @Model.Area м²</p>
+            }
+            <p style="margin-bottom:10px;"><strong>Создана:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+            @if (Model.UpdatedAt.HasValue)
+            {
+                <p style="margin-bottom:10px;"><strong>Обновлена:</strong> @Model.UpdatedAt.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+            }
+            <p style="margin-bottom:10px;">
+                <strong>Статус:</strong>
+                @switch (Model.Status)
+                {
+                    case remont_kvartir.Models.RequestStatus.New:
+                        <span class="badge" style="background:#3498db;">Новая</span>
+                        break;
+                    case remont_kvartir.Models.RequestStatus.InProgress:
+                        <span class="badge" style="background:#f39c12;">В работе</span>
+                        break;
+                    case remont_kvartir.Models.RequestStatus.Completed:
+                        <span class="badge" style="background:#27ae60;">Завершена</span>
+                        break;
+                    case remont_kvartir.Models.RequestStatus.Cancelled:
+                        <span class="badge" style="background:#95a5a6;">Отменена</span>
+                        break;
+                }
+            </p>
+
+            @if (Model.Status == remont_kvartir.Models.RequestStatus.New)
+            {
+                <form asp-action="CancelRequest" asp-route-id="@Model.Id" method="post" style="margin-top:20px;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-dark" onclick="return confirm('Отменить заявку?');">Отменить заявку</button>
+                </form>
+            }
+        </div>
+
+        <p style="margin-top:20px;"><a asp-action="Index" class="link-arrow">← Назад в кабинет</a></p>
+    </div>
+</section>
