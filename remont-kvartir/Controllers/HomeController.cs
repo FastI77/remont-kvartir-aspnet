@@ -26,6 +26,11 @@ namespace remont_kvartir.Controllers
             return View(latestServices);
         }
 
+        public IActionResult About()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitRequest([FromBody] HomeRequestViewModel model)
