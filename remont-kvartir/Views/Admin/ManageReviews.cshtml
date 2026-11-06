@@ -1,0 +1,35 @@
+﻿@model IEnumerable<remont_kvartir.Models.Review>
+@{
+    ViewData["Title"] = "Модерация отзывов";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title-left">Все отзывы</h2>
+        <div class="grid-3">
+            @foreach (var item in Model)
+            {
+                <div class="card review-card">
+                    <div class="stars">
+                        @for (int i = 0; i < item.Rating; i++)
+                        {
+                            <span>★</span>
+                        }
+                    </div>
+                    <p class="review-text">"@item.Text"</p>
+                    <div class="review-author">@item.AuthorName</div>
+                    <div class="review-meta">@item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</div>
+                    <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;">
+                        <span class="badge" style="background: @(item.IsApproved ? "#27ae60" : "#f39c12")">
+                            @(item.IsApproved ? "Опубликован" : "На модерации")
+                        </span>
+                        <form asp-action="DeleteReview" method="post" onsubmit="return confirm('Удалить отзыв?');">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" style="background:none; border:none; color:#c00; cursor:pointer;">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

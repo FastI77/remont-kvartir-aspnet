@@ -277,6 +277,46 @@ namespace remont_kvartir.Migrations
                     b.ToTable("RepairRequests");
                 });
 
+            modelBuilder.Entity("remont_kvartir.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RepairRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RepairRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("remont_kvartir.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -371,6 +411,21 @@ namespace remont_kvartir.Migrations
                         .WithMany("RepairRequests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.Review", b =>
+                {
+                    b.HasOne("remont_kvartir.Models.RepairRequest", "RepairRequest")
+                        .WithMany()
+                        .HasForeignKey("RepairRequestId");
+
+                    b.HasOne("remont_kvartir.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("RepairRequest");
 
                     b.Navigation("User");
                 });

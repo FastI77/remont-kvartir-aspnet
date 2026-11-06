@@ -1,0 +1,56 @@
+﻿@model IEnumerable<remont_kvartir.Models.Review>
+@{
+    ViewData["Title"] = "Отзывы";
+}
+@if (TempData["Error"] != null)
+{
+    <div class="card" style="background:#fce4e4; border-color:#f5c6cb; margin-bottom:20px; color: #721c24;">
+        @TempData["Error"]
+    </div>
+}
+
+<section class="section-padding">
+    <div class="container">
+        @if (TempData["Success"] != null)
+        {
+            <div class="card" style="background:#e6f7e6; border-color:#79c879; margin-bottom:20px;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="section-header">
+            <h2 class="section-title">Отзывы клиентов</h2>
+            <a asp-action="Create" class="btn-primary">Оставить отзыв</a>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center" style="padding: 40px 0;">
+                <p class="text-muted">Пока нет отзывов.</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid-3">
+                @foreach (var review in Model)
+                {
+                    <div class="card review-card">
+                        <div class="stars">
+                            @for (int i = 0; i < review.Rating; i++)
+                            {
+                                <span>★</span>
+                            }
+                            @for (int i = review.Rating; i < 5; i++)
+                            {
+                                <span style="color: #ccc;">★</span>
+                            }
+                        </div>
+                        <p class="review-text">"@review.Text"</p>
+                        <div class="review-author">@review.AuthorName</div>
+                        <div class="review-meta">@review.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

@@ -23,7 +23,20 @@ namespace remont_kvartir.Controllers
                 .Take(3)
                 .ToListAsync();
 
-            return View(latestServices);
+            var latestReviews = await _db.Reviews
+                .Where(r => r.IsApproved)
+                .OrderByDescending(r => r.CreatedAt)
+                .Take(3)
+                .ToListAsync();
+
+ 
+            var model = new HomeViewModel
+            {
+                LatestServices = latestServices,
+                LatestReviews = latestReviews
+            };
+
+            return View(model);
         }
 
         public IActionResult About()

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<remont_kvartir.Models.RepairRequest>
+@{
+    ViewData["Title"] = "Управление заявками";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title-left">Все заявки</h2>
+        <div class="card">
+            <table style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e5e5e5; text-align: left;">
+                        <th style="padding: 10px;">ID</th>
+                        <th style="padding: 10px;">Клиент</th>
+                        <th style="padding: 10px;">Тип</th>
+                        <th style="padding: 10px;">Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="border-bottom: 1px solid #e5e5e5;">
+                            <td style="padding: 10px;">@item.Id</td>
+                            <td style="padding: 10px;">@item.ClientName (@item.ClientPhone)</td>
+                            <td style="padding: 10px;">@item.RepairType</td>
+                            <td style="padding: 15px 10px;">
+                                <form asp-action="UpdateStatus" method="post" style="display:flex; gap:10px; align-items:center;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+
+                                    <div style="position: relative; display: inline-block;">
+                                        <select name="status" style="appearance: none; -webkit-appearance: none; -moz-appearance: none; padding: 8px 35px 8px 15px; border: 2px solid #e5e5e5; border-radius: 6px; background-color: #fff; font-family: inherit; font-size: 14px; color: #333; cursor: pointer; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='#c97b3f'" onblur="this.style.borderColor='#e5e5e5'">
+                                            <option value="1" selected="@(item.Status == remont_kvartir.Models.RequestStatus.New)">Новая</option>
+                                            <option value="2" selected="@(item.Status == remont_kvartir.Models.RequestStatus.InProgress)">В работе</option>
+                                            <option value="3" selected="@(item.Status == remont_kvartir.Models.RequestStatus.Completed)">Завершена</option>
+                                            <option value="4" selected="@(item.Status == remont_kvartir.Models.RequestStatus.Cancelled)">Отменена</option>
+                                        </select>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c97b3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </div>
+                                    <button type="submit" style="background: var(--color-accent); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.3s; outline: none;" onmouseover="this.style.background='#b3662c'" onmouseout="this.style.background='#c97b3f'">
+                                        ОК
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
