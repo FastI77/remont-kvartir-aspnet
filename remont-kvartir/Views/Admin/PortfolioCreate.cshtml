@@ -1,0 +1,33 @@
+﻿@model remont_kvartir.Models.PortfolioItem
+@{
+    ViewData["Title"] = "Добавить работу";
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 600px;">
+        <h2 class="section-title-left">Новая работа</h2>
+        <form asp-action="PortfolioCreate" method="post" enctype="multipart/form-data" class="card">
+            <div class="form-group">
+                <label asp-for="Title">Название проекта</label>
+                <input asp-for="Title" class="custom-input" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Описание</label>
+                <textarea asp-for="Description" class="custom-input" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Обложка (главная картинка с ПК)</label>
+                <input type="file" name="mainImage" class="custom-input" accept="image/*" />
+            </div>
+
+            <div class="form-group">
+                <label>Дополнительные фото для галереи</label>
+                <input type="file" name="galleryImages" class="custom-input" accept="image/*" multiple />
+            </div>
+
+            <button type="submit" class="btn-submit" style="width: 100%;">Сохранить</button>
+            <a asp-action="Portfolio" style="display: block; text-align: center; margin-top: 15px;">Отмена</a>
+        </form>
+    </div>
+</section>

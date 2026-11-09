@@ -1,0 +1,76 @@
+﻿@model IEnumerable<remont_kvartir.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Пользователи";
+    var userRoles = ViewBag.UserRoles as Dictionary<string, IList<string>>;
+    var allRoles = ViewBag.AllRoles as List<string>;
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 class="section-title-left" style="margin: 0;">Пользователи системы</h2>
+            <a asp-action="Index" class="link-arrow">← Назад в панель</a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #e6f7e6; border: 1px solid #79c879; color: #2c7a2c; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div style="background: #fdeaea; border: 1px solid #e57373; color: #c0392b; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Error"]
+            </div>
+        }
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <thead style="background: var(--color-dark); color: #fff;">
+                    <tr>
+                        <th style="padding: 15px; text-align: left;">ФИО</th>
+                        <th style="padding: 15px; text-align: left;">Email</th>
+                        <th style="padding: 15px; text-align: left;">Телефон</th>
+                        <th style="padding: 15px; text-align: left;">Роль</th>
+                        <th style="padding: 15px; text-align: center;">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        var roles = userRoles.ContainsKey(user.Id) ? userRoles[user.Id] : new List<string>();
+                        var currentRole = roles.FirstOrDefault() ?? "User";
+
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 15px;">
+                                <strong>@(string.IsNullOrEmpty(user.FullName) ? "Без имени" : user.FullName)</strong>
+                            </td>
+                            <td style="padding: 15px;">@user.Email</td>
+                            <td style="padding: 15px;">@(user.Phone ?? "—")</td>
+                            <td style="padding: 15px;">
+                                <form asp-action="UpdateUserRole" method="post" style="display: flex; gap: 10px; margin: 0;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <select name="newRole" class="custom-select" style="padding: 5px 10px; font-size: 14px; background: #f9f9f9; width: 150px;" onchange="this.form.submit()">
+                                        @foreach (var role in allRoles)
+                                        {
+                                            <option value="@role" selected="@(role == currentRole)">@role</option>
+                                        }
+                                    </select>
+                                </form>
+                            </td>
+                            <td style="padding: 15px; text-align: center;">
+                                <form asp-action="DeleteUser" method="post" onsubmit="return confirm('Удалить пользователя? Все его заявки также будут удалены.');" style="margin: 0;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: 600;">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

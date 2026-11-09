@@ -1,0 +1,34 @@
+﻿@model IEnumerable<remont_kvartir.Models.Service>
+@{
+    ViewData["Title"] = "Услуги";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 class="section-title-left" style="margin: 0;">Управление услугами</h2>
+            <div>
+                <a asp-action="ServiceCreate" class="btn-primary" style="padding: 10px 20px; font-size: 14px;">+ Добавить услугу</a>
+                <a asp-action="Index" class="link-arrow" style="margin-left: 20px;">← Назад</a>
+            </div>
+        </div>
+
+        <div class="grid-3">
+            @foreach (var s in Model)
+            {
+                <div class="card">
+                    <h4 style="margin-bottom: 10px;">@s.Title</h4>
+                    <p class="text-muted" style="font-size: 14px; margin-bottom: 15px;">@s.ShortDescription</p>
+                    <p style="font-weight: 600; color: var(--color-accent); margin-bottom: 20px;">@s.Price</p>
+
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <a asp-action="ServiceEdit" asp-route-id="@s.Id" class="link-arrow">Редактировать</a>
+                        <form asp-action="ServiceDelete" asp-route-id="@s.Id" method="post" onsubmit="return confirm('Удалить услугу?');" style="margin: 0;">
+                            <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 0; font-weight: 600; font-size: 15px;">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

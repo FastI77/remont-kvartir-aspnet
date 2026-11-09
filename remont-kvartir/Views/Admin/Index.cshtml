@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Панель управления";
+}
+
+<section class="section-padding" style="background: #f4f6f8; min-height: 80vh;">
+    <div class="container">
+        <h2 class="section-title-left">Панель администратора</h2>
+
+        <div class="grid-3" style="margin-bottom: 40px;">
+            <div class="card text-center" style="border-top: 4px solid var(--color-accent);">
+                <h3 style="font-size: 32px; margin-bottom: 5px;">@ViewBag.NewRequests</h3>
+                <p class="text-muted">Новых заявок</p>
+            </div>
+            <div class="card text-center" style="border-top: 4px solid #3498db;">
+                <h3 style="font-size: 32px; margin-bottom: 5px;">@ViewBag.TotalRequests</h3>
+                <p class="text-muted">Всего заявок</p>
+            </div>
+            <div class="card text-center" style="border-top: 4px solid #27ae60;">
+                <h3 style="font-size: 32px; margin-bottom: 5px;">@ViewBag.TotalServices</h3>
+                <p class="text-muted">Услуг на сайте</p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <a asp-action="Requests" class="btn-primary">Управление заявками</a>
+            <a asp-action="Services" class="btn-dark">Управление услугами</a>
+            <a asp-action="Portfolio" class="btn-dark">Управление портфолио</a>
+            <a asp-action="Users" class="btn-dark">Пользователи</a>
+        </div>
+    </div>
+</section>

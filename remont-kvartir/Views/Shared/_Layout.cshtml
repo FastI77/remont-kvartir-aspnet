@@ -20,6 +20,7 @@
                     <li><a href="/Reviews">Отзывы</a></li>
                     <li><a href="/Promotions">Акции</a></li>
                     <li><a href="/Contacts">Контакты</a></li>
+                    <li><a href="/Portfolio">Портфолио</a></li>
                     <li class="mobile-only"><a href="/Cabinet">Личный кабинет</a></li>
                 </ul>
             </nav>
@@ -32,6 +33,10 @@
                 else
                 {
                     <a href="/Account/Login" class="btn-login">Войти</a>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <a href="/Admin" class="btn-login" style="background: #3498db; margin-right: 10px;">Админ-панель</a>
                 }
             </div>
 
@@ -75,6 +80,7 @@
     </footer>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
