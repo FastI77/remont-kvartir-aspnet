@@ -21,13 +21,12 @@ namespace remont_kvartir.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        //отзывы модерация
         public bool IsApproved { get; set; } = false;
 
         public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
 
-        // Связь с заявкой
+
         public int? RepairRequestId { get; set; }
         public RepairRequest? RepairRequest { get; set; }
     }

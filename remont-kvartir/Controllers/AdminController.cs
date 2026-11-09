@@ -6,7 +6,7 @@ using remont_kvartir.Models;
 
 namespace remont_kvartir.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")] // Доступ только для админа и менеджера
+    [Authorize(Roles = "Admin,Manager")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -16,7 +16,7 @@ namespace remont_kvartir.Controllers
             _db = db;
         }
 
-        // Список всех заявок
+      
         public async Task<IActionResult> ManageRequests()
         {
             var requests = await _db.RepairRequests
@@ -25,7 +25,6 @@ namespace remont_kvartir.Controllers
             return View(requests);
         }
 
-        // Смена статуса заявки
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, RequestStatus status)
         {
@@ -39,7 +38,7 @@ namespace remont_kvartir.Controllers
             return RedirectToAction(nameof(ManageRequests));
         }
 
-        // Список всех отзывов
+
         public async Task<IActionResult> ManageReviews()
         {
             var reviews = await _db.Reviews
@@ -48,7 +47,6 @@ namespace remont_kvartir.Controllers
             return View(reviews);
         }
 
-        // Удаление отзыва
         [HttpPost]
         public async Task<IActionResult> DeleteReview(int id)
         {
