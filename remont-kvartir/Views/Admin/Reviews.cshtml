@@ -1,0 +1,77 @@
+﻿@model IEnumerable<remont_kvartir.Models.Review>
+@{
+    ViewData["Title"] = "Модерация отзывов";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 class="section-title-left" style="margin: 0;">Модерация отзывов</h2>
+            <a asp-action="Index" class="link-arrow">← Назад в панель</a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #e6f7e6; border: 1px solid #79c879; color: #2c7a2c; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="grid-3">
+            @if (!Model.Any())
+            {
+                <p class="text-muted">Отзывов пока нет.</p>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="card review-card">
+                        <div class="stars" style="display: flex; gap: 4px; margin-bottom: 15px;">
+                            @for (int i = 0; i < item.Rating; i++)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5b041" stroke="none">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            }
+                            @for (int i = item.Rating; i < 5; i++)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#e5e5e5" stroke="none">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            }
+                        </div>
+                        <p class="review-text">"@item.Text"</p>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="Фото отзыва" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" />
+                        }
+                        <div class="review-author">@item.AuthorName</div>
+                        <div class="review-meta">@item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</div>
+
+                        <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span class="badge" style="background: @(item.IsApproved ? "#27ae60" : "#f39c12")">
+                                @(item.IsApproved ? "Опубликован" : "На модерации")
+                            </span>
+                            <div style="display: flex; gap: 10px;">
+                                @if (!item.IsApproved)
+                                {
+                                    <form asp-action="ApproveReview" method="post" style="margin: 0;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" style="background:none; border:none; color:#27ae60; font-weight:600; cursor:pointer;">Одобрить</button>
+                                    </form>
+                                }
+                                <form asp-action="DeleteReview" method="post" onsubmit="return confirm('Удалить отзыв?');" style="margin: 0;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" style="background:none; border:none; color:#e74c3c; font-weight:600; cursor:pointer;">Удалить</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

@@ -35,17 +35,25 @@
                 @foreach (var review in Model)
                 {
                     <div class="card review-card">
-                        <div class="stars">
+                        <div class="stars" style="display: flex; gap: 4px; color: #f5b041; margin-bottom: 15px;">
                             @for (int i = 0; i < review.Rating; i++)
                             {
-                                <span>★</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
                             }
                             @for (int i = review.Rating; i < 5; i++)
                             {
-                                <span style="color: #ccc;">★</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#e5e5e5" stroke="none">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
                             }
                         </div>
                         <p class="review-text">"@review.Text"</p>
+                        @if (!string.IsNullOrEmpty(review.ImageUrl))
+                        {
+                            <img src="@review.ImageUrl" alt="Фото отзыва" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" />
+                        }
                         <div class="review-author">@review.AuthorName</div>
                         <div class="review-meta">@review.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</div>
                     </div>

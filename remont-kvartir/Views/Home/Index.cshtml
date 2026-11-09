@@ -175,6 +175,10 @@
                             }
                         </div>
                         <p class="review-text">"@review.Text"</p>
+                        @if (!string.IsNullOrEmpty(review.ImageUrl))
+                        {
+                            <img src="@review.ImageUrl" alt="Фото отзыва" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" />
+                        }
                         <div class="review-author">@review.AuthorName</div>
                         <div class="review-meta">@review.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</div>
                     </div>

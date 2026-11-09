@@ -7,13 +7,13 @@
     <div class="container" style="max-width: 600px;">
         <h2 class="section-title-left">Оставить отзыв</h2>
 
-        <form asp-action="Create" method="post" class="card">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="card">
             <div asp-validation-summary="ModelOnly" style="color:#c00; margin-bottom:15px;"></div>
 
             <div style="margin-bottom:15px;">
                 <label asp-for="RepairRequestId" style="display:block; margin-bottom:6px;"></label>
-                <select asp-for="RepairRequestId" class="custom-select">
-                    <option value="">-- Выберите ремонт --</option>
+                <select asp-for="RepairRequestId" class="review-select">
+                    <option value="">Выберите ремонт</option>
                     @foreach (var req in Model.AvailableRequests)
                     {
                         <option value="@req.Id">@req.RepairType (от @req.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy"))</option>
@@ -24,7 +24,7 @@
 
             <div style="margin-bottom:15px;">
                 <label asp-for="Rating" style="display:block; margin-bottom:6px;">Оценка (1-5)</label>
-                <select asp-for="Rating" class="custom-select">
+                <select asp-for="Rating" class="review-select">
                     <option value="5">5 ★ (Отлично)</option>
                     <option value="4">4 ★ (Хорошо)</option>
                     <option value="3">3 ★ (Нормально)</option>
@@ -38,6 +38,11 @@
                 <label asp-for="Text" style="display:block; margin-bottom:6px;">Текст отзыва</label>
                 <textarea asp-for="Text" class="custom-input" rows="5" placeholder="Расскажите о вашем опыте ремонта..."></textarea>
                 <span asp-validation-for="Text" style="color:#c00; font-size:13px;"></span>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label style="display:block; margin-bottom:6px;">Фотография (необязательно)</label>
+                <input type="file" name="imageFile" class="custom-input" accept="image/*" />
             </div>
 
             <button type="submit" class="btn-submit" style="width:100%;">Отправить на модерацию</button>

@@ -58,19 +58,33 @@ namespace remont_kvartir.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ReviewCreateViewModel model)
+        public async Task<IActionResult> Create(ReviewCreateViewModel model, IFormFile? imageFile)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Challenge();
 
             if (!ModelState.IsValid)
             {
-
                 model.AvailableRequests = await _db.RepairRequests
                     .Where(r => r.UserId == user.Id && r.Status == RequestStatus.Completed)
                     .Where(r => !_db.Reviews.Any(rev => rev.RepairRequestId == r.Id))
                     .ToListAsync();
                 return View(model);
+            }
+
+            string? imageUrl = null;
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                Directory.CreateDirectory(folderPath);
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                imageUrl = "/uploads/" + fileName;
             }
 
             var review = new Review
@@ -80,6 +94,7 @@ namespace remont_kvartir.Controllers
                 RepairRequestId = model.RepairRequestId,
                 Rating = model.Rating,
                 Text = model.Text,
+                ImageUrl = imageUrl,
                 CreatedAt = DateTime.UtcNow,
                 IsApproved = false
             };

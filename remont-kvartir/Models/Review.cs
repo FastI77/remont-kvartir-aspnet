@@ -19,6 +19,9 @@ namespace remont_kvartir.Models
         [Display(Name = "Текст отзыва")]
         public string Text { get; set; } = string.Empty;
 
+        [Display(Name = "Фотография (необязательно)")]
+        public string? ImageUrl { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public bool IsApproved { get; set; } = false;

@@ -46,6 +46,7 @@ namespace remont_kvartir.Controllers
             ViewBag.TotalServices = await _db.Services.CountAsync();
             ViewBag.TotalPortfolio = await _db.PortfolioItems.CountAsync();
             ViewBag.TotalUsers = await _userManager.Users.CountAsync();
+            ViewBag.TotalReviews = await _db.Reviews.CountAsync(); // Добавили счетчик отзывов
             return View();
         }
 
@@ -285,6 +286,43 @@ namespace remont_kvartir.Controllers
                 await _db.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Portfolio));
+        }
+
+        // --- ОТЗЫВЫ ---
+        public async Task<IActionResult> Reviews()
+        {
+            var reviews = await _db.Reviews
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+            return View(reviews);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            var review = await _db.Reviews.FindAsync(id);
+            if (review != null)
+            {
+                _db.Reviews.Remove(review);
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "Отзыв удален.";
+            }
+            return RedirectToAction(nameof(Reviews));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveReview(int id)
+        {
+            var review = await _db.Reviews.FindAsync(id);
+            if (review != null)
+            {
+                review.IsApproved = true;
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "Отзыв опубликован!";
+            }
+            return RedirectToAction(nameof(Reviews));
         }
     }
 }
