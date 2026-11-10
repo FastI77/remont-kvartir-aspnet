@@ -324,5 +324,68 @@ namespace remont_kvartir.Controllers
             }
             return RedirectToAction(nameof(Reviews));
         }
+
+
+        // --- АКЦИИ ---
+        public async Task<IActionResult> Promotions()
+        {
+            var promotions = await _db.Promotions
+                .OrderByDescending(p => p.Id)
+                .ToListAsync();
+            return View(promotions);
+        }
+
+        public IActionResult PromotionCreate()
+        {
+            return View(new Promotion());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PromotionCreate(Promotion model)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Promotions.Add(model);
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "Акция добавлена!";
+                return RedirectToAction(nameof(Promotions));
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> PromotionEdit(int id)
+        {
+            var promo = await _db.Promotions.FindAsync(id);
+            if (promo == null) return NotFound();
+            return View(promo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PromotionEdit(Promotion model)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Promotions.Update(model);
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "Акция обновлена!";
+                return RedirectToAction(nameof(Promotions));
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PromotionDelete(int id)
+        {
+            var promo = await _db.Promotions.FindAsync(id);
+            if (promo != null)
+            {
+                _db.Promotions.Remove(promo);
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "Акция удалена!";
+            }
+            return RedirectToAction(nameof(Promotions));
+        }
+
+
     }
 }

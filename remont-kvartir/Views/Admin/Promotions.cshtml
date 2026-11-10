@@ -1,0 +1,54 @@
+﻿@model IEnumerable<remont_kvartir.Models.Promotion>
+@{
+    ViewData["Title"] = "Управление акциями";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 class="section-title-left" style="margin: 0;">Управление акциями</h2>
+            <div>
+                <a asp-action="PromotionCreate" class="btn-primary" style="padding: 10px 20px; font-size: 14px;">+ Добавить акцию</a>
+                <a asp-action="Index" class="link-arrow" style="margin-left: 20px;">← Назад</a>
+            </div>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #e6f7e6; border: 1px solid #79c879; color: #2c7a2c; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="grid-3">
+            @foreach (var item in Model)
+            {
+                <div class="card" style="border-top: 4px solid var(--color-accent);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <span class="badge">@(string.IsNullOrEmpty(item.Badge) ? "Акция" : item.Badge)</span>
+                        @if (!item.IsActive)
+                        {
+                            <span class="badge" style="background:#888;">Неактивна</span>
+                        }
+                    </div>
+                    <h4 style="margin-bottom: 10px;">@item.Title</h4>
+                    <p class="text-muted" style="font-size: 14px; margin-bottom: 15px;">@item.Description</p>
+                    @if (item.ValidUntil.HasValue)
+                    {
+                        <p style="font-size: 13px; color: #888; margin-bottom: 15px;">До: @item.ValidUntil.Value.ToString("dd.MM.yyyy")</p>
+                    }
+                    else
+                    {
+                        <p style="font-size: 13px; color: transparent; margin-bottom: 15px;">&nbsp;</p>
+                    }
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <a asp-action="PromotionEdit" asp-route-id="@item.Id" class="link-arrow">Редактировать</a>
+                        <form asp-action="PromotionDelete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Удалить акцию?');" style="margin: 0;">
+                            <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 0; font-weight: 600; font-size: 15px;">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

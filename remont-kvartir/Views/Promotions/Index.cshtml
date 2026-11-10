@@ -1,0 +1,60 @@
+﻿@model IEnumerable<remont_kvartir.Models.Promotion>
+@{
+    ViewData["Title"] = "Акции";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title-center">Текущие акции и спецпредложения</h2>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center" style="padding: 40px 0;">
+                <p class="text-muted">Сейчас нет активных акций.</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid-3" style="margin-top: 40px;">
+                @foreach (var promo in Model)
+                {
+                    <div class="card" style="border-top: 4px solid var(--color-accent); display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                            <span class="badge" style="background: var(--color-accent);">@promo.Badge</span>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c97b3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                                <rect x="2" y="7" width="20" height="5"></rect>
+                                <line x1="12" y1="22" x2="12" y2="7"></line>
+                                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">@promo.Title</h3>
+                        <p class="text-muted mb-20" style="flex-grow: 1;">@promo.Description</p>
+
+                        @if (promo.ValidUntil.HasValue)
+                        {
+                            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Действует до: @promo.ValidUntil.Value.ToString("dd.MM.yyyy")</p>
+                        }
+                        else
+                        {
+                            <p style="font-size: 13px; color: transparent; margin-bottom: 20px;">&nbsp;</p>
+                        }
+
+                        <div style="margin-top: auto;">
+                            <a href="/#request" class="btn-card" style="display: inline-block;">Оставить заявку</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="card" style="margin-top: 50px; background: #f9f7f4; border-color: var(--color-border); text-align: center; padding: 40px;">
+            <h3 class="section-title-center" style="margin-bottom: 15px; font-size: 24px;">Не нашли подходящую акцию?</h3>
+            <p class="text-muted" style="margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Мы всегда готовы обсудить индивидуальные условия сотрудничества. Оставьте заявку, и мы свяжемся с вами, чтобы обсудить персональную скидку.
+            </p>
+            <a href="/#request" class="btn-primary">Получить консультацию</a>
+        </div>
+    </div>
+</section>
