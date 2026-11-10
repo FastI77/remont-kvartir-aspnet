@@ -24,7 +24,7 @@ namespace remont_kvartir.Models
         [Display(Name = "Категория (например, Квартиры, Коттеджи)")]
         public string? Category { get; set; }
 
-        [Display(Name = "Иконка (CSS-класс или URL картинки)")]
+        [Display(Name = "Картинка (URL или файл)")]
         public string? ImageUrl { get; set; }
 
         [Display(Name = "Длительность (например, от 2 месяцев)")]

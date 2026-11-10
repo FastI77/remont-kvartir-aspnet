@@ -1,4 +1,3 @@
-/* Базовые настройки и переменные */
 :root {
     --color-dark: #1f2328;
     --color-text: #333333;
@@ -42,7 +41,7 @@ a {
     width: 100%;
 }
 
-/* Шапка сайта */
+/* ШАПКА */
 .site-header {
     background: #ffffff;
     border-bottom: 1px solid var(--color-border);
@@ -56,47 +55,82 @@ a {
     justify-content: space-between;
     align-items: center;
     height: 80px;
+    gap: 10px;
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--color-dark);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    flex-shrink: 0;
 }
 
     .logo span {
         color: var(--color-accent);
     }
 
-.main-nav ul {
+.main-nav {
+    flex-grow: 1;
     display: flex;
-    list-style: none;
-    gap: 30px;
+    justify-content: center;
 }
 
-.main-nav a {
-    color: var(--color-dark);
-    font-weight: 500;
-    font-size: 15px;
-}
-
-    .main-nav a:hover {
-        color: var(--color-accent);
+    .main-nav ul {
+        display: flex;
+        list-style: none;
+        gap: 15px;
+        flex-wrap: nowrap;
     }
+
+    .main-nav a {
+        color: var(--color-dark);
+        font-weight: 500;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+        .main-nav a:hover {
+            color: var(--color-accent);
+        }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
 
 .btn-login {
     background: var(--color-dark);
     color: #fff;
-    padding: 10px 24px;
+    padding: 8px 12px;
     border-radius: 4px;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 13px;
+    transition: background 0.2s;
+    white-space: nowrap;
 }
 
     .btn-login:hover {
         background: #000;
+        color: #fff;
+    }
+
+.btn-admin {
+    background: #3498db;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 13px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+    .btn-admin:hover {
+        background: #2980b9;
         color: #fff;
     }
 
@@ -109,12 +143,12 @@ a {
     color: var(--color-dark);
 }
 
-/* Основной контент */
+/* ОСНОВНОЙ КОНТЕНТ */
 .main-content {
     flex: 1;
 }
 
-/* Подвал сайта */
+/* ПОДВАЛ */
 .site-footer {
     background: var(--color-dark);
     color: #a0a5aa;
@@ -161,7 +195,7 @@ a {
     gap: 10px;
 }
 
-/* Слайдер */
+/* СЛАЙДЕР */
 .hero-slider {
     position: relative;
     height: 600px;
@@ -217,6 +251,8 @@ a {
     border-radius: 4px;
     text-decoration: none;
     transition: background 0.2s;
+    border: none;
+    cursor: pointer;
 }
 
     .btn-primary:hover {
@@ -248,7 +284,7 @@ a {
         transform: scale(1.2);
     }
 
-/* Утилиты и типографика */
+/* ТИПОГРАФИКА И УТИЛИТЫ */
 .section-padding {
     padding: 80px 0;
 }
@@ -331,7 +367,7 @@ a {
     margin-bottom: 40px;
 }
 
-/* Ссылки со стрелками */
+/* ССЫЛКИ */
 .link-arrow {
     font-weight: 600;
     color: var(--color-accent);
@@ -354,16 +390,18 @@ a {
         transform: translateX(5px) translateY(2px);
     }
 
-/* Кнопки */
+/* КНОПКИ */
 .btn-dark {
     display: inline-block;
     background: var(--color-dark);
     color: white;
-    padding: 15px 40px;
+    padding: 12px 25px;
     border-radius: 6px;
     font-weight: 600;
     text-decoration: none;
     transition: 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
     .btn-dark:hover {
@@ -382,6 +420,8 @@ a {
     transition: background 0.3s, transform 0.2s;
     display: inline-block;
     text-align: center;
+    border: none;
+    cursor: pointer;
 }
 
     .btn-card:hover {
@@ -406,7 +446,7 @@ a {
         background: var(--color-accent-hover);
     }
 
-/* Сетки и карточки */
+/* СЕТКИ И КАРТОЧКИ */
 .grid-3 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -455,10 +495,12 @@ a {
     letter-spacing: 0.5px;
 }
 
-/* Отзывы */
+/* ОТЗЫВЫ */
 .review-card {
     display: flex;
     flex-direction: column;
+    max-width: 400px; 
+    width: 100%;
 }
 
 .stars {
@@ -484,7 +526,25 @@ a {
     color: #888;
 }
 
-/* О компании */
+.review-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
+    background-color: #fff;
+    font-family: var(--font-main);
+    font-size: 15px;
+    color: var(--color-dark);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.review-select:focus {
+    border-color: var(--color-accent);
+}
+
+/* О КОМПАНИИ */
 .about-image-wrapper {
     flex: 1;
     min-width: 300px;
@@ -501,7 +561,59 @@ a {
     object-fit: cover;
 }
 
-/* Форма заявки */
+/* Стили для страницы О компании */
+.page-header {
+    background-color: var(--color-dark);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    font-size: 18px;
+    color: #a0a5aa;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.stat-item {
+    background: var(--color-bg-light);
+    padding: 30px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+}
+
+.advantage-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* ФОРМА ЗАЯВКИ */
 .cta-section {
     padding: 80px 0;
     background: var(--color-dark);
@@ -548,7 +660,6 @@ a {
         outline: none;
     }
 
-/* Обертка для селекта */
 .select-wrapper {
     position: relative;
     width: 100%;
@@ -587,7 +698,7 @@ a {
         text-decoration: underline;
     }
 
-/* Блок контактов */
+/* КОНТАКТЫ */
 .contact-card {
     padding: 40px 30px;
     background: #faf9f8;
@@ -615,64 +726,7 @@ a {
     text-decoration: none;
 }
 
-/* Адаптивность */
-@media (max-width: 992px) {
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .burger {
-        display: block;
-    }
-
-    .main-nav {
-        display: none;
-        position: absolute;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        padding: 20px;
-        border-bottom: 1px solid var(--color-border);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
-
-        .main-nav.active {
-            display: block;
-        }
-
-        .main-nav ul {
-            flex-direction: column;
-            gap: 15px;
-        }
-
-    .header-actions {
-        display: none;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-slider {
-        height: 500px;
-    }
-
-    .slide-content h1 {
-        font-size: 36px;
-    }
-
-    .slide-content p {
-        font-size: 16px;
-    }
-
-    .custom-form {
-        grid-template-columns: 1fr;
-    }
-}
-/* --- Стили для форм авторизации и регистрации --- */
+/* АВТОРИЗАЦИЯ */
 .auth-form-wrapper {
     background: #ffffff;
     padding: 40px;
@@ -724,6 +778,7 @@ a {
         accent-color: var(--color-accent);
     }
 
+/* ЛИЧНЫЙ КАБИНЕТ */
 .cabinet-actions {
     display: flex;
     gap: 15px;
@@ -746,12 +801,105 @@ a {
         margin: 0;
         display: flex;
     }
+
 .mobile-only {
     display: none;
 }
 
+/* АДАПТИВНОСТЬ */
+@media (max-width: 1200px) {
+    .main-nav ul {
+        gap: 12px;
+    }
+
+    .main-nav a {
+        font-size: 13px;
+    }
+
+    .btn-login, .btn-admin {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .main-nav ul {
+        gap: 8px;
+    }
+
+    .main-nav a {
+        font-size: 13px;
+    }
+
+    .header-inner {
+        gap: 5px;
+    }
+
+    .btn-login, .btn-admin {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+}
 
 @media (max-width: 768px) {
+    .burger {
+        display: block;
+    }
+
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 20px;
+        border-bottom: 1px solid var(--color-border);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        justify-content: flex-start;
+    }
+
+        .main-nav.active {
+            display: block;
+        }
+
+        .main-nav ul {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+    .header-actions {
+        display: none;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-slider {
+        height: 500px;
+    }
+
+    .slide-content h1 {
+        font-size: 36px;
+    }
+
+    .slide-content p {
+        font-size: 16px;
+    }
+
+    .custom-form {
+        grid-template-columns: 1fr;
+    }
+
     .mobile-only {
         display: block;
     }

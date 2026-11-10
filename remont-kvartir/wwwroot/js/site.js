@@ -1,6 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
 
-    // Мобильное меню (бургер)
     const burgerBtn = document.getElementById('burgerBtn');
     const mainNav = document.getElementById('mainNav');
 
@@ -10,7 +9,6 @@
         });
     }
 
-    // Слайдер на главной
     let slideIndex = 0;
     let slideInterval;
 

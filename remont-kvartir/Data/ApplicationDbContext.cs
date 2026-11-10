@@ -13,6 +13,12 @@ namespace remont_kvartir.Data
 
         public DbSet<RepairRequest> RepairRequests { get; set; } = null!;
         public DbSet<Service> Services { get; set; } = null!;
+        public DbSet<PortfolioItem> PortfolioItems { get; set; } = null!;
+        public DbSet<PortfolioImage> PortfolioImages { get; set; } = null!;
+
+        public DbSet<Promotion> Promotions { get; set; } = null!;
+
+        public DbSet<Review> Reviews { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

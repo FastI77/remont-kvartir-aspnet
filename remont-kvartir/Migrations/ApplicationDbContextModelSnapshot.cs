@@ -230,6 +230,85 @@ namespace remont_kvartir.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("remont_kvartir.Models.PortfolioImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PortfolioItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PortfolioItemId");
+
+                    b.ToTable("PortfolioImages");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.PortfolioItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PortfolioItems");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.Promotion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Badge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ValidUntil")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotions");
+                });
+
             modelBuilder.Entity("remont_kvartir.Models.RepairRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -275,6 +354,49 @@ namespace remont_kvartir.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RepairRequests");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RepairRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RepairRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("remont_kvartir.Models.Service", b =>
@@ -365,6 +487,17 @@ namespace remont_kvartir.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("remont_kvartir.Models.PortfolioImage", b =>
+                {
+                    b.HasOne("remont_kvartir.Models.PortfolioItem", "PortfolioItem")
+                        .WithMany("Gallery")
+                        .HasForeignKey("PortfolioItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PortfolioItem");
+                });
+
             modelBuilder.Entity("remont_kvartir.Models.RepairRequest", b =>
                 {
                     b.HasOne("remont_kvartir.Models.ApplicationUser", "User")
@@ -375,9 +508,29 @@ namespace remont_kvartir.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("remont_kvartir.Models.Review", b =>
+                {
+                    b.HasOne("remont_kvartir.Models.RepairRequest", "RepairRequest")
+                        .WithMany()
+                        .HasForeignKey("RepairRequestId");
+
+                    b.HasOne("remont_kvartir.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("RepairRequest");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("remont_kvartir.Models.ApplicationUser", b =>
                 {
                     b.Navigation("RepairRequests");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.PortfolioItem", b =>
+                {
+                    b.Navigation("Gallery");
                 });
 #pragma warning restore 612, 618
         }

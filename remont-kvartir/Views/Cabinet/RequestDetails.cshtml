@@ -7,9 +7,22 @@
     <div class="container" style="max-width: 700px;">
         <h2 class="section-title-left">Заявка №@Model.Id</h2>
 
+        @if (TempData["Error"] != null)
+        {
+            <div style="background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; color: #c0392b; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Error"]
+            </div>
+        }
+
         <div class="card">
             <p style="margin-bottom:10px;"><strong>Тип ремонта:</strong> @Model.RepairType</p>
             <p style="margin-bottom:10px;"><strong>Описание:</strong> @Model.Description</p>
+
+            @if (!string.IsNullOrEmpty(Model.ClientName))
+            {
+                <p style="margin-bottom:10px;"><strong>Клиент:</strong> @Model.ClientName (@Model.ClientPhone)</p>
+            }
+
             @if (!string.IsNullOrEmpty(Model.Address))
             {
                 <p style="margin-bottom:10px;"><strong>Адрес:</strong> @Model.Address</p>
@@ -44,10 +57,13 @@
 
             @if (Model.Status == remont_kvartir.Models.RequestStatus.New)
             {
-                <form asp-action="CancelRequest" asp-route-id="@Model.Id" method="post" style="margin-top:20px;">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn-dark" onclick="return confirm('Отменить заявку?');">Отменить заявку</button>
-                </form>
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--color-border);">
+                    <p class="text-muted" style="margin-bottom: 15px;">Вы можете отменить эту заявку, пока она не взята в работу.</p>
+                    <form asp-action="CancelRequest" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Вы уверены, что хотите отменить заявку?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-dark" style="background: #e74c3c; border-color: #e74c3c;">Отменить заявку</button>
+                    </form>
+                </div>
             }
         </div>
 

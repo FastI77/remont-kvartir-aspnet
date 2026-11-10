@@ -155,10 +155,16 @@ namespace remont_kvartir.Controllers
             if (user == null) return RedirectToAction("Login", "Account");
 
             var request = await _db.RepairRequests
-                .FirstOrDefaultAsync(r => r.Id == id && r.UserId == user.Id);
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if (request == null)
                 return NotFound();
+
+            if (request.UserId != user.Id && !User.IsInRole("Admin") && !User.IsInRole("Manager"))
+            {
+                return Forbid();
+            }
 
             return View(request);
         }
@@ -171,20 +177,30 @@ namespace remont_kvartir.Controllers
             if (user == null) return RedirectToAction("Login", "Account");
 
             var request = await _db.RepairRequests
-                .FirstOrDefaultAsync(r => r.Id == id && r.UserId == user.Id);
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if (request == null)
                 return NotFound();
+
+            if (request.UserId != user.Id && !User.IsInRole("Admin") && !User.IsInRole("Manager"))
+            {
+                return Forbid();
+            }
 
             if (request.Status == RequestStatus.New)
             {
                 request.Status = RequestStatus.Cancelled;
                 request.UpdatedAt = DateTime.UtcNow;
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "Заявка отменена";
+                TempData["Success"] = "Заявка успешно отменена.";
+            }
+            else
+            {
+                TempData["Error"] = "Эту заявку уже нельзя отменить (она в работе или завершена).";
             }
 
-            return RedirectToAction(nameof(Index));
+            // Изменено: вместо редиректа в личный кабинет, возвращаемся на страницу этой же заявки
+            return RedirectToAction(nameof(RequestDetails), new { id = id });
         }
     }
 }

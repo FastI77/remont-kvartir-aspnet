@@ -1,0 +1,82 @@
+﻿@model IEnumerable<remont_kvartir.Models.RepairRequest>
+@{
+    ViewData["Title"] = "Заявки";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 class="section-title-left" style="margin: 0;">Заявки на ремонт</h2>
+            <a asp-action="Index" class="link-arrow">← Назад в панель</a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #e6f7e6; border: 1px solid #79c879; color: #2c7a2c; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div style="background: #fdeaea; border: 1px solid #e57373; color: #c0392b; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                @TempData["Error"]
+            </div>
+        }
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <thead style="background: var(--color-dark); color: #fff;">
+                    <tr>
+                        <th style="padding: 15px; text-align: left;">ID</th>
+                        <th style="padding: 15px; text-align: left;">Клиент</th>
+                        <th style="padding: 15px; text-align: left;">Тип</th>
+                        <th style="padding: 15px; text-align: left;">Дата</th>
+                        <th style="padding: 15px; text-align: left;">Статус</th>
+                        <th style="padding: 15px; text-align: center;">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 15px;">@r.Id</td>
+                            <td style="padding: 15px;">
+                                @if (!string.IsNullOrEmpty(r.ClientName))
+                                {
+                                    <strong>@r.ClientName</strong> <br />
+                                    <small class="text-muted">@r.ClientPhone</small>
+                                }
+                                else if (r.User != null)
+                                {
+                                    <strong>@r.User.FullName</strong> <br />
+                                    <small class="text-muted">@(r.User.Phone ?? r.User.Email)</small>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Неизвестно</span>
+                                }
+                            </td>
+                            <td style="padding: 15px;">@r.RepairType</td>
+                            <td style="padding: 15px;">@r.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</td>
+                            <td style="padding: 15px;">
+                                <form asp-action="UpdateRequestStatus" method="post" style="display: flex; gap: 5px; margin: 0;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <select name="status" class="custom-select" style="padding: 5px; font-size: 13px; background: #f9f9f9;" onchange="this.form.submit()">
+                                        <option value="1" selected="@(r.Status == remont_kvartir.Models.RequestStatus.New)">Новая</option>
+                                        <option value="2" selected="@(r.Status == remont_kvartir.Models.RequestStatus.InProgress)">В работе</option>
+                                        <option value="3" selected="@(r.Status == remont_kvartir.Models.RequestStatus.Completed)">Завершена</option>
+                                        <option value="4" selected="@(r.Status == remont_kvartir.Models.RequestStatus.Cancelled)">Отменена</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td style="padding: 15px; text-align: center;">
+                                <a asp-controller="Cabinet" asp-action="RequestDetails" asp-route-id="@r.Id" class="link-arrow">Детали</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

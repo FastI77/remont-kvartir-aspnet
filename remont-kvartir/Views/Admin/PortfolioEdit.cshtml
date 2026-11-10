@@ -1,0 +1,54 @@
+﻿@model remont_kvartir.Models.PortfolioItem
+@{
+    ViewData["Title"] = "Редактировать работу";
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 600px;">
+        <h2 class="section-title-left">Редактирование</h2>
+        <form asp-action="PortfolioEdit" method="post" enctype="multipart/form-data" class="card">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageUrl" />
+            <input type="hidden" asp-for="CreatedAt" />
+
+            <div class="form-group">
+                <label asp-for="Title">Название</label>
+                <input asp-for="Title" class="custom-input" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Описание</label>
+                <textarea asp-for="Description" class="custom-input" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Текущая обложка</label>
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" style="max-height: 100px; display: block; margin-bottom: 10px; border-radius: 4px;" />
+                }
+                <input type="file" name="mainImage" class="custom-input" accept="image/*" />
+            </div>
+
+            <div class="form-group">
+                <label>Добавить новые фото в галерею</label>
+                <input type="file" name="galleryImages" class="custom-input" accept="image/*" multiple />
+            </div>
+
+            @if (Model.Gallery != null && Model.Gallery.Any())
+            {
+                <div style="margin-bottom: 20px;">
+                    <p><strong>Текущие фото галереи:</strong></p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        @foreach (var img in Model.Gallery)
+                        {
+                            <img src="@img.ImageUrl" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" />
+                        }
+                    </div>
+                </div>
+            }
+
+            <button type="submit" class="btn-submit" style="width: 100%;">Обновить</button>
+            <a asp-action="Portfolio" style="display: block; text-align: center; margin-top: 15px;">Отмена</a>
+        </form>
+    </div>
+</section>

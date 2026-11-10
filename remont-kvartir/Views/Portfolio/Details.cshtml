@@ -1,0 +1,85 @@
+﻿@model remont_kvartir.Models.PortfolioItem
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 1000px;">
+        <a asp-action="Index" class="link-arrow" style="margin-bottom: 30px; display: inline-flex;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg); margin-right: 6px; margin-left: 0;">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+            Назад ко всем работам
+        </a>
+
+        <h1 class="section-title-left">@Model.Title</h1>
+        <p class="text-muted" style="margin-bottom: 30px;">Дата добавления: @Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</p>
+
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 40px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Title" style="width: 100%; max-height: 600px; object-fit: cover; cursor: pointer;" onclick="openImage('@Model.ImageUrl')" />
+            }
+        </div>
+
+        <h3 style="font-size: 24px; margin-bottom: 20px; color: var(--color-dark);">Описание проекта</h3>
+        <p style="font-size: 16px; line-height: 1.8; color: #444; white-space: pre-line; margin-bottom: 40px;">
+            @Model.Description
+        </p>
+
+        @if (Model.Gallery != null && Model.Gallery.Any())
+        {
+            <h3 style="font-size: 24px; margin-bottom: 20px; color: var(--color-dark);">Фотографии с объекта</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+                @foreach (var img in Model.Gallery)
+                {
+                    <div style="height: 180px; border-radius: 8px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        <img src="@img.ImageUrl" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openImage('@img.ImageUrl')" />
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<div id="customImageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+
+    <button onclick="closeImage()" style="position: absolute; top: 20px; right: 30px; background: transparent; border: none; color: white; font-size: 40px; cursor: pointer; z-index: 10000; line-height: 1;">&times;</button>
+
+    <img id="customModalImage" src="" style="max-width: 90%; max-height: 90vh; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.5); object-fit: contain;" />
+</div>
+
+@section Scripts {
+    <script>
+        const modal = document.getElementById('customImageModal');
+        const modalImg = document.getElementById('customModalImage');
+
+        function openImage(url) {
+            modalImg.src = url;
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImage() {
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeImage();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                closeImage();
+            }
+        });
+    </script>
+}
