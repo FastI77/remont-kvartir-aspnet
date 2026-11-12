@@ -204,10 +204,10 @@
             @Html.AntiForgeryToken()
 
             <div>
-                <input type="text" name="Name" id="Name" placeholder="Ваше имя" required class="custom-input" />
+                <input type="text" name="Name" id="Name" placeholder="Ваше имя" required class="custom-input" minlength="2" maxlength="50" pattern="^[А-Яа-яЁёA-Za-z\s\-]+$"  title="Имя должно содержать только буквы" />
             </div>
             <div>
-                <input type="tel" name="Phone" id="Phone" placeholder="Ваш телефон" required class="custom-input" />
+                <input type="tel" name="Phone" id="Phone" placeholder="+7 (999) 123-45-67" required class="custom-input" maxlength="18" pattern="^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$" title="Введите номер в формате +7 (999) 123-45-67" />
             </div>
 
             <div class="select-wrapper" style="grid-column: 1 / -1;">
@@ -225,7 +225,7 @@
 
             <button type="submit" id="submitBtn" class="btn-submit" style="grid-column: 1 / -1;">Отправить</button>
             <p class="form-policy" style="grid-column: 1 / -1;">
-                Нажимая кнопку, вы соглашаетесь с <a href="#">политикой обработки персональных данных</a>
+                Нажимая кнопку, вы соглашаетесь с <a href="/Privacy">политикой обработки персональных данных</a>
             </p>
         </form>
     </div>
@@ -268,6 +268,34 @@
 </section>
 @section Scripts {
     <script>
+
+        const nameInput = document.getElementById('Name');
+        if (nameInput) {
+            nameInput.addEventListener('input', function () {
+                this.value = this.value.replace(/[0-9]/g, '');
+            });
+        }
+
+        const phoneInput = document.getElementById('Phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function () {
+                let digits = this.value.replace(/\D/g, '');
+
+                if (digits.length === 0) {
+                    this.value = '';
+                    return;
+                }
+
+                let formatted = '+7';
+                if (digits.length > 1) formatted += ' (' + digits.substring(1, 4);
+                if (digits.length >= 5) formatted += ') ' + digits.substring(4, 7);
+                if (digits.length >= 8) formatted += '-' + digits.substring(7, 9);
+                if (digits.length >= 10) formatted += '-' + digits.substring(9, 11);
+
+                this.value = formatted;
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('repairForm');
             const messageBox = document.getElementById('formMessage');

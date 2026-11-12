@@ -36,7 +36,7 @@
 
             <div style="margin-bottom:15px;">
                 <label asp-for="Text" style="display:block; margin-bottom:6px;">Текст отзыва</label>
-                <textarea asp-for="Text" class="custom-input" rows="5" placeholder="Расскажите о вашем опыте ремонта..."></textarea>
+                <textarea asp-for="Text" class="custom-input" rows="5" required minlength="10" maxlength="500" placeholder="Расскажите о вашем опыте ремонта..."></textarea>
                 <span asp-validation-for="Text" style="color:#c00; font-size:13px;"></span>
             </div>
 
