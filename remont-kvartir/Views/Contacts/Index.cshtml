@@ -51,9 +51,9 @@
             <form id="contactForm" method="post">
                 @Html.AntiForgeryToken()
                 <div class="custom-form">
-                    <input type="text" id="Name" name="Name" placeholder="Ваше имя" required class="custom-input" />
-                    <input type="email" id="Email" name="Email" placeholder="Ваш Email" required class="custom-input" />
-                    <textarea id="Message" name="Message" placeholder="Ваше сообщение..." required class="custom-input" rows="5" style="grid-column: 1 / -1; resize: vertical;"></textarea>
+                    <input type="text" id="Name" name="Name" placeholder="Ваше имя" required class="custom-input" minlength="2" maxlength="50" pattern="^[А-Яа-яЁёA-Za-z\s\-]+$" title="Имя должно содержать только буквы" />
+                    <input type="email" id="Email" name="Email" placeholder="Ваш Email" required class="custom-input" maxlength="100" />
+                    <textarea id="Message" name="Message" placeholder="Ваше сообщение..." required class="custom-input" minlength="10" maxlength="200" rows="5" style="grid-column: 1 / -1; resize: vertical;"></textarea>
                     <button type="submit" id="contactSubmitBtn" class="btn-submit" style="grid-column: 1 / -1;">Отправить сообщение</button>
                 </div>
             </form>
@@ -78,6 +78,13 @@
             myMap.geoObjects.add(myPlacemark);
         }
  
+        const nameInput = document.getElementById('Name');
+        if (nameInput) {
+            nameInput.addEventListener('input', function () {
+                this.value = this.value.replace(/[0-9]/g, '');
+            });
+        }
+
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.getElementById('contactForm');
                 const messageBox = document.getElementById('contactMessage');
