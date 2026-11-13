@@ -1,0 +1,44 @@
+﻿@model remont_kvartir.Models.Review
+@{
+    ViewData["Title"] = "Отзыв от " + Model.AuthorName;
+}
+
+<section class="section-padding">
+    <div class="container" style="max-width: 800px;">
+        <a asp-action="Index" class="link-arrow" style="margin-bottom: 30px; display: inline-flex;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg); margin-right: 6px; margin-left: 0;">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+            Назад ко всем отзывам
+        </a>
+
+        <div class="card" style="padding: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="stars" style="display: flex; gap: 4px;">
+                    @for (int i = 0; i < Model.Rating; i++)
+                    {
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#f5b041" stroke="none">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    }
+                </div>
+                <span class="text-muted">@Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+            </div>
+
+            <h2 style="font-size: 24px; color: var(--color-dark); margin-bottom: 20px;">@Model.AuthorName</h2>
+
+            <p style="font-size: 18px; line-height: 1.8; color: #444; margin-bottom: 30px; white-space: pre-line;">
+                "@Model.Text"
+            </p>
+
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div style="margin-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 15px;">Фотография</h3>
+                    <img src="@Model.ImageUrl" alt="Фото отзыва" style="width: 100%; max-height: 500px; object-fit: contain; border-radius: 8px; background: #f9f7f4;" />
+                </div>
+            }
+        </div>
+    </div>
+</section>

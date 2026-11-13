@@ -15,6 +15,7 @@ namespace remont_kvartir.Data
         public DbSet<Service> Services { get; set; } = null!;
         public DbSet<PortfolioItem> PortfolioItems { get; set; } = null!;
         public DbSet<PortfolioImage> PortfolioImages { get; set; } = null!;
+        public DbSet<ContactMessage> ContactMessages { get; set; } = null!;
 
         public DbSet<Promotion> Promotions { get; set; } = null!;
 

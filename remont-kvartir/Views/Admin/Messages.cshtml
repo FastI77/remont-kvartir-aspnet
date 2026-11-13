@@ -1,0 +1,22 @@
+﻿@model IEnumerable<remont_kvartir.Models.ContactMessage>
+@{
+    ViewData["Title"] = "Сообщения";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title-left">Сообщения от клиентов</h2>
+
+        <div class="grid-3">
+            @foreach (var msg in Model)
+            {
+                <div class="card" style="border-left: 4px solid var(--color-accent);">
+                    <p><strong>От:</strong> @msg.Name (@msg.Email)</p>
+                    <p><strong>Дата:</strong> @msg.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+                    <p style="margin-top: 10px; color: #444;">@msg.Message</p>
+                </div>
+            }
+        </div>
+        <a asp-action="Index" class="link-arrow" style="margin-top: 20px; display: inline-block;">← Назад в панель</a>
+    </div>
+</section>

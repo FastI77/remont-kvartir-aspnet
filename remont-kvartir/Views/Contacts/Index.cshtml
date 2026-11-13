@@ -65,7 +65,7 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey=6aa9d687-ebed-4e84-a801-3f1990647388&lang=ru_RU" type="text/javascript"></script>
     <script type="text/javascript">
         ymaps.ready(init);
-        function init(){
+        function init() {
             var myMap = new ymaps.Map("yandex-map", {
                 center: [56.852, 53.204],
                 zoom: 16
@@ -90,33 +90,60 @@
                 const messageBox = document.getElementById('contactMessage');
                 const submitBtn = document.getElementById('contactSubmitBtn');
 
-                if (form) {
-                    form.addEventListener('submit', function (event) {
-                        event.preventDefault()
+            if (form) {
+                form.addEventListener('submit', async function (event) {
+                    event.preventDefault();
 
-                        const originalBtnText = submitBtn.innerText;
-                        submitBtn.innerText = 'Отправка...';
-                        submitBtn.disabled = true;
-                        messageBox.style.display = 'none';
+                    const originalBtnText = submitBtn.innerText;
+                    submitBtn.innerText = 'Отправка...';
+                    submitBtn.disabled = true;
+                    messageBox.style.display = 'none';
 
-                        setTimeout(function () {
-                            messageBox.style.display = 'block';
+                    const formData = {
+                        Name: document.getElementById('Name').value,
+                        Email: document.getElementById('Email').value,
+                        Message: document.getElementById('Message').value
+                    };
+
+                    const token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                    try {
+                        const response = await fetch('/Contacts/SendMessage', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': token
+                            },
+                            body: JSON.stringify(formData)
+                        });
+
+                        const result = await response.json();
+                        messageBox.style.display = 'block';
+
+                        if (result.success) {
                             messageBox.style.background = '#e6f7e6';
                             messageBox.style.border = '1px solid #79c879';
                             messageBox.style.color = '#2c7a2c';
-                            messageBox.innerText = 'Спасибо! Ваше сообщение отправлено. Мы свяжемся с вами.';
-
+                            messageBox.innerText = result.message;
                             form.reset();
-
-                            submitBtn.innerText = originalBtnText;
-                            submitBtn.disabled = false;
-
-                            setTimeout(() => {
-                                messageBox.style.display = 'none';
-                            }, 5000);
-                        }, 1000);
-                    });
-                }
-            });
+                        } else {
+                            messageBox.style.background = '#fce4e4';
+                            messageBox.style.border = '1px solid #e74c3c';
+                            messageBox.style.color = '#c0392b';
+                            messageBox.innerText = result.message || 'Произошла ошибка.';
+                        }
+                    } catch (error) {
+                        messageBox.style.display = 'block';
+                        messageBox.style.background = '#fce4e4';
+                        messageBox.style.border = '1px solid #e74c3c';
+                        messageBox.style.color = '#c0392b';
+                        messageBox.innerText = 'Ошибка сети. Попробуйте позже.';
+                    } finally {
+                        submitBtn.innerText = originalBtnText;
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+        });
     </script>
 }

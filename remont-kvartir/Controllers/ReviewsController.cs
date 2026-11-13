@@ -28,6 +28,20 @@ namespace remont_kvartir.Controllers
             return View(reviews);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var review = await _db.Reviews
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.Id == id && r.IsApproved);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            return View(review);
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Create()

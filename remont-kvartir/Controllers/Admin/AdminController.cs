@@ -386,6 +386,14 @@ namespace remont_kvartir.Controllers
             return RedirectToAction(nameof(Promotions));
         }
 
+        // --- КОНТАКТЫ ---
+        public async Task<IActionResult> Messages()
+        {
+            var messages = await _db.ContactMessages
+                .OrderByDescending(m => m.CreatedAt)
+                .ToListAsync();
+            return View(messages);
+        }
 
     }
 }

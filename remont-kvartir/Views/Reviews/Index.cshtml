@@ -56,6 +56,9 @@
                         }
                         <div class="review-author">@review.AuthorName</div>
                         <div class="review-meta">@review.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</div>
+                        <div style="margin-top: 15px;">
+                            <a asp-action="Details" asp-route-id="@review.Id" class="btn-card" style="display: inline-block; padding: 8px 20px; font-size: 13px; ">Читать полностью</a>
+                        </div>
                     </div>
                 }
             </div>
