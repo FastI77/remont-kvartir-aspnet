@@ -199,7 +199,7 @@ namespace remont_kvartir.Controllers
                 TempData["Error"] = "Эту заявку уже нельзя отменить (она в работе или завершена).";
             }
 
-            // Изменено: вместо редиректа в личный кабинет, возвращаемся на страницу этой же заявки
+
             return RedirectToAction(nameof(RequestDetails), new { id = id });
         }
     }
