@@ -25,7 +25,7 @@
 
                 <div class="form-group">
                     <label asp-for="Phone">Телефон</label>
-                    <input asp-for="Phone" class="custom-input" placeholder="+7 (999) 123-45-67" />
+                    <input asp-for="Phone" id="Phone" class="custom-input" placeholder="+7 (999) 123-45-67" maxlength="18" />
                     <span asp-validation-for="Phone" style="color:#c00; font-size:13px;"></span>
                 </div>
 
@@ -53,4 +53,29 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const phoneInput = document.getElementById('Phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function () {
+                let digits = this.value.replace(/\D/g, '');
+
+                if (digits.length === 0) {
+                    this.value = '';
+                    return;
+                }
+
+                if (digits[0] === '8') {
+                    digits = '7' + digits.substring(1);
+                }
+
+                let formatted = '+7';
+                if (digits.length > 1) formatted += ' (' + digits.substring(1, 4);
+                if (digits.length >= 5) formatted += ') ' + digits.substring(4, 7);
+                if (digits.length >= 8) formatted += '-' + digits.substring(7, 9);
+                if (digits.length >= 10) formatted += '-' + digits.substring(9, 11);
+
+                this.value = formatted;
+            });
+        }
+    </script>
 }

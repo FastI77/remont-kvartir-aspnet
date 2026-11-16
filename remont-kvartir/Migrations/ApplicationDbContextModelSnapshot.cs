@@ -416,7 +416,8 @@ namespace remont_kvartir.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -428,6 +429,28 @@ namespace remont_kvartir.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.ReviewImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("ReviewImages");
                 });
 
             modelBuilder.Entity("remont_kvartir.Models.Service", b =>
@@ -554,12 +577,28 @@ namespace remont_kvartir.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("remont_kvartir.Models.ReviewImage", b =>
+                {
+                    b.HasOne("remont_kvartir.Models.Review", "Review")
+                        .WithMany("Gallery")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+                });
+
             modelBuilder.Entity("remont_kvartir.Models.ApplicationUser", b =>
                 {
                     b.Navigation("RepairRequests");
                 });
 
             modelBuilder.Entity("remont_kvartir.Models.PortfolioItem", b =>
+                {
+                    b.Navigation("Gallery");
+                });
+
+            modelBuilder.Entity("remont_kvartir.Models.Review", b =>
                 {
                     b.Navigation("Gallery");
                 });

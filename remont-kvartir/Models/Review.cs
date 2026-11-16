@@ -16,6 +16,7 @@ namespace remont_kvartir.Models
         public int Rating { get; set; }
 
         [Required]
+        [StringLength(1000, MinimumLength = 10, ErrorMessage = "От 10 до 1000 символов")]
         [Display(Name = "Текст отзыва")]
         public string Text { get; set; } = string.Empty;
 
@@ -28,6 +29,8 @@ namespace remont_kvartir.Models
 
         public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
+
+        public List<ReviewImage> Gallery { get; set; } = new();
 
 
         public int? RepairRequestId { get; set; }

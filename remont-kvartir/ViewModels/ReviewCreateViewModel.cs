@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using remont_kvartir.Models;
 
 namespace remont_kvartir.ViewModels
@@ -14,7 +15,11 @@ namespace remont_kvartir.ViewModels
         public int Rating { get; set; }
 
         [Required(ErrorMessage = "Напишите текст отзыва")]
+        [StringLength(1000, MinimumLength = 10, ErrorMessage = "От 10 до 1000 символов")]
         public string Text { get; set; } = string.Empty;
+
+        [Display(Name = "Фотографии (до 5 шт., необязательно)")]
+        public List<IFormFile>? ImageFiles { get; set; }
 
         public List<RepairRequest> AvailableRequests { get; set; } = new List<RepairRequest>();
     }

@@ -32,13 +32,112 @@
                 "@Model.Text"
             </p>
 
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            @{
+                var allImages = new List<string>();
+                if (Model.Gallery != null)
+                {
+                    foreach (var img in Model.Gallery) { allImages.Add(img.ImageUrl); }
+                }
+            }
+
+            @if (allImages.Any())
             {
-                <div style="margin-top: 30px;">
-                    <h3 style="font-size: 18px; margin-bottom: 15px;">Фотография</h3>
-                    <img src="@Model.ImageUrl" alt="Фото отзыва" style="width: 100%; max-height: 500px; object-fit: contain; border-radius: 8px; background: #f9f7f4;" />
+                <h3 style="font-size: 18px; margin-bottom: 15px;">Фотографии</h3>
+
+                <div class="portfolio-main-slider">
+                    <div class="main-slider-track">
+                        @for (int i = 0; i < allImages.Count; i++)
+                        {
+                            <div class="main-slide">
+                                <img src="@allImages[i]" alt="Фото отзыва" onclick="openImage('@allImages[i]')" />
+                            </div>
+                        }
+                    </div>
+
+                    @if (allImages.Count > 1)
+                    {
+                        <button class="slider-btn prev-btn" onclick="moveMainSlide(-1)">&#10094;</button>
+                        <button class="slider-btn next-btn" onclick="moveMainSlide(1)">&#10095;</button>
+                    }
                 </div>
+
+                @if (allImages.Count > 1)
+                {
+                    <div class="gallery-grid" style="margin-top: 20px;">
+                        @for (int i = 0; i < allImages.Count; i++)
+                        {
+                            <div class="gallery-thumb @(i == 0 ? "active" : "")" data-index="@i" onclick="goToSlide(@i)">
+                                <img src="@allImages[i]" alt="Фото отзыва" />
+                            </div>
+                        }
+                    </div>
+                }
             }
         </div>
     </div>
 </section>
+
+<div id="customImageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+    <button onclick="closeImage()" style="position: absolute; top: 20px; right: 30px; background: transparent; border: none; color: white; font-size: 40px; cursor: pointer; z-index: 10000; line-height: 1;">&times;</button>
+    <img id="customModalImage" src="" style="max-width: 90%; max-height: 90vh; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.5); object-fit: contain;" />
+</div>
+
+@section Scripts {
+    <script>
+        const modal = document.getElementById('customImageModal');
+        const modalImg = document.getElementById('customModalImage');
+
+        function openImage(url) {
+            modalImg.src = url;
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImage() {
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeImage();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.style.display === 'flex') closeImage();
+        });
+
+        let currentMainSlide = 0;
+
+        function updateSliderAndThumbs(index) {
+            const track = document.querySelector('.main-slider-track');
+            const slides = document.querySelectorAll('.main-slide');
+            const thumbs = document.querySelectorAll('.gallery-thumb');
+
+            if (!track || slides.length === 0) return;
+
+            if (index >= slides.length) currentMainSlide = 0;
+            else if (index < 0) currentMainSlide = slides.length - 1;
+            else currentMainSlide = index;
+
+            const offset = -currentMainSlide * 100;
+            track.style.transform = `translateX(${offset}%)`;
+
+            thumbs.forEach((thumb, i) => {
+                if (i === currentMainSlide) thumb.classList.add('active');
+                else thumb.classList.remove('active');
+            });
+        }
+
+        function moveMainSlide(direction) {
+            updateSliderAndThumbs(currentMainSlide + direction);
+        }
+
+        function goToSlide(index) {
+            updateSliderAndThumbs(index);
+        }
+    </script>
+}

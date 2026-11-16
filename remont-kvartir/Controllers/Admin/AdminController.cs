@@ -292,6 +292,7 @@ namespace remont_kvartir.Controllers
         public async Task<IActionResult> Reviews()
         {
             var reviews = await _db.Reviews
+                .Include(r => r.Gallery)
                 .OrderByDescending(r => r.CreatedAt)
                 .ToListAsync();
             return View(reviews);
@@ -299,7 +300,7 @@ namespace remont_kvartir.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteReview(int id)
+        public async Task<IActionResult> DeleteReview(int id, string? returnUrl = null)
         {
             var review = await _db.Reviews.FindAsync(id);
             if (review != null)
@@ -308,12 +309,16 @@ namespace remont_kvartir.Controllers
                 await _db.SaveChangesAsync();
                 TempData["Success"] = "Отзыв удален.";
             }
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
             return RedirectToAction(nameof(Reviews));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApproveReview(int id)
+        public async Task<IActionResult> ApproveReview(int id, string? returnUrl = null)
         {
             var review = await _db.Reviews.FindAsync(id);
             if (review != null)
@@ -322,7 +327,24 @@ namespace remont_kvartir.Controllers
                 await _db.SaveChangesAsync();
                 TempData["Success"] = "Отзыв опубликован!";
             }
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
             return RedirectToAction(nameof(Reviews));
+        }
+
+
+        public async Task<IActionResult> ReviewDetails(int id)
+        {
+            var review = await _db.Reviews
+                .Include(r => r.User)
+                .Include(r => r.Gallery)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (review == null) return NotFound();
+
+            return View(review);
         }
 
 

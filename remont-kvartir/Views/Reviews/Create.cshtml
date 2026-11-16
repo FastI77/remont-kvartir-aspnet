@@ -36,13 +36,17 @@
 
             <div style="margin-bottom:15px;">
                 <label asp-for="Text" style="display:block; margin-bottom:6px;">Текст отзыва</label>
-                <textarea asp-for="Text" class="custom-input" rows="5" required minlength="10" maxlength="500" placeholder="Расскажите о вашем опыте ремонта..."></textarea>
+                <textarea asp-for="Text" class="custom-input" rows="5" required minlength="10" maxlength="1000" placeholder="Расскажите о вашем опыте ремонта..."></textarea>
                 <span asp-validation-for="Text" style="color:#c00; font-size:13px;"></span>
             </div>
 
             <div style="margin-bottom:15px;">
-                <label style="display:block; margin-bottom:6px;">Фотография (необязательно)</label>
-                <input type="file" name="imageFile" class="custom-input" accept="image/*" />
+                <label asp-for="ImageFiles" style="display:block; margin-bottom:6px;">
+                    Фотографии (до 5 шт., необязательно)
+                </label>
+                <input asp-for="ImageFiles" type="file" name="ImageFiles" class="custom-input" accept="image/*" multiple />
+                <small style="color:#888; font-size:12px;">Можно выбрать несколько файлов: jpg, png, webp, gif</small>
+                <span asp-validation-for="ImageFiles" style="color:#c00; font-size:13px;"></span>
             </div>
 
             <button type="submit" class="btn-submit" style="width:100%;">Отправить на модерацию</button>

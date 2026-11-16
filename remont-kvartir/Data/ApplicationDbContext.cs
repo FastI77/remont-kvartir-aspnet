@@ -20,7 +20,7 @@ namespace remont_kvartir.Data
         public DbSet<Promotion> Promotions { get; set; } = null!;
 
         public DbSet<Review> Reviews { get; set; } = null!;
-
+        public DbSet<ReviewImage> ReviewImages { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
